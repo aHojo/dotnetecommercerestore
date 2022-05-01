@@ -12,3 +12,7 @@
 ## update to the latest migration
 
 `dotnet ef database update`
+
+
+## Delete the db
+`dotnet ef database drop`
