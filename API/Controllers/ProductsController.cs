@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using API.Data;
 using API.Entities;
@@ -30,7 +28,7 @@ namespace API.Controllers
     }
 
     // get the id parameter
-    [HttpGet("{id}")] // api/products/3
+    [HttpGet("{id:int}")] // api/products/3
                       // in the params id is from the path
     public async Task<ActionResult<Product>> GetProduct(int id)
     {
