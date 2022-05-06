@@ -1,48 +1,38 @@
-import { useEffect, useState } from 'react';
-import { Product } from '../models/Product';
+import Catalog from "../../features/catalog/Catalog";
+import {Container, createTheme, CssBaseline, ThemeProvider} from "@mui/material";
+import Header from './Header';
+import React, {useState} from "react";
+
+// import { ThemeProvider } from "@emotion/react";
 
 function App() {
-  const [products, setProducts] = useState<Product[]>([]);
+    const [darkMode, setDarkMode] = useState(false);
+    const paletteType = darkMode ? 'dark' : 'light';
+    const theme = createTheme({
+        palette: {
+            mode: paletteType,
+            background: {
+                default: paletteType === 'light' ? '#eaeaea' : '#121212'
+            }
+        }
+    })
+
+    function handleThemeChange() {
+        setDarkMode(!darkMode);
+    }
+
+    return (
+        <ThemeProvider theme={theme}>
+            <CssBaseline/>
+
+            <Header darkMode={darkMode} handleThemeChange={handleThemeChange}/>
+            <Container>
+                <Catalog/>
+            </Container>
 
 
-  useEffect(() => {
-    fetch('http://localhost:5000/api/products')
-      .then(response => response.json())
-      .then(data => {
-        console.log(data)
-        setProducts(data)
-      })
-  }, [])
-
-  function addProduct() {
-
-    setProducts(prevState =>
-      [...prevState,
-      {
-        id: prevState.length + 101,
-        name: 'product' + (prevState.length + 1),
-        price: (prevState.length * 100) + 100,
-        brand: "somebrand",
-        description: "some description",
-        pictureUrl: "http://picsum.photos/200"
-      },
-      ])
-  }
-  return (
-    <div>
-      <h1>Re-Store</h1>
-
-      <ul>
-        {products.map((product, index) => {
-          return (
-            <li key={product.id}>{product.name} - {product.price}</li>
-          )
-        })}
-      </ul>
-      <button onClick={addProduct}>Add Product</button>
-
-    </div>
-  );
+        </ThemeProvider>
+    );
 }
 
 export default App;
