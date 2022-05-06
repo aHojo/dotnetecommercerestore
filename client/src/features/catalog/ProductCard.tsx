@@ -1,5 +1,6 @@
 import { Product } from '../../app/models/Product';
 import { Card, CardMedia, CardContent, Typography, CardActions, Button, CardHeader, Avatar } from '@mui/material';
+import {Link} from "react-router-dom";
 
 
 interface ProductProps {
@@ -38,7 +39,7 @@ export default function ProductCard({ product }: ProductProps) {
       </CardContent>
       <CardActions>
         <Button size="small">Add Product</Button>
-        <Button size="small">View</Button>
+        <Button component={Link} to={`/catalog/${product.id}`} size="small">View</Button>
       </CardActions>
     </Card>
   )

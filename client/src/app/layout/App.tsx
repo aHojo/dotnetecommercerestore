@@ -2,6 +2,12 @@ import Catalog from "../../features/catalog/Catalog";
 import {Container, createTheme, CssBaseline, ThemeProvider} from "@mui/material";
 import Header from './Header';
 import React, {useState} from "react";
+import {Route, Routes} from "react-router-dom";
+import ProductDetails from "../../features/catalog/ProductDetails";
+import Contact from "../../features/Contact/Contact";
+import About from "../../features/About/About";
+import Home from "../../features/Home/Home";
+
 
 // import { ThemeProvider } from "@emotion/react";
 
@@ -27,7 +33,13 @@ function App() {
 
             <Header darkMode={darkMode} handleThemeChange={handleThemeChange}/>
             <Container>
-                <Catalog/>
+                <Routes>
+                    <Route path='/' element={<Home />}/>
+                    <Route path='/catalog' element={<Catalog />}/>
+                    <Route path='/catalog/:id' element={<ProductDetails />}/>
+                    <Route path='/about' element={<About />}/>
+                    <Route path='/contact' element={<Contact />}/>
+                </Routes>
             </Container>
 
 
