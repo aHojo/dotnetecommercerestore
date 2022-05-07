@@ -1,5 +1,7 @@
 using API.Data;
+using API.MiddleWare;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -39,9 +41,12 @@ namespace API
     // THIS IS FOR MIDDLEWARE
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
+      // ORDER MATTERS IN THIS
+      app.UseMiddleware<ExceptionMiddleware>();
+
       if (env.IsDevelopment())
       {
-        app.UseDeveloperExceptionPage();
+        // app.UseDeveloperExceptionPage();
         app.UseSwagger();
         app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPIv5 v1"));
       }

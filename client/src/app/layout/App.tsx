@@ -7,6 +7,7 @@ import ProductDetails from "../../features/catalog/ProductDetails";
 import Contact from "../../features/Contact/Contact";
 import About from "../../features/About/About";
 import Home from "../../features/Home/Home";
+import {ToastContainer} from "react-toastify";
 
 
 // import { ThemeProvider } from "@emotion/react";
@@ -29,6 +30,7 @@ function App() {
 
     return (
         <ThemeProvider theme={theme}>
+            <ToastContainer />
             <CssBaseline/>
 
             <Header darkMode={darkMode} handleThemeChange={handleThemeChange}/>
@@ -41,8 +43,6 @@ function App() {
                     <Route path='/contact' element={<Contact />}/>
                 </Routes>
             </Container>
-
-
         </ThemeProvider>
     );
 }
