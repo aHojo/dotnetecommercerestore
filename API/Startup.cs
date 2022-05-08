@@ -46,6 +46,7 @@ namespace API
 
       if (env.IsDevelopment())
       {
+        // This causes an error now that we are using our own exception handling class "ExceptionMiddleware".
         // app.UseDeveloperExceptionPage();
         app.UseSwagger();
         app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPIv5 v1"));

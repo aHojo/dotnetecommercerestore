@@ -1,4 +1,6 @@
 import axios, {AxiosError, AxiosResponse} from "axios";
+import {toast} from "react-toastify";
+import { history} from "../../index";
 
 axios.defaults.baseURL = "http://localhost:5000/api/";
 
@@ -9,7 +11,37 @@ const responseBody = (response: AxiosResponse) => {
 axios.interceptors.response.use(response => {
     return response;
 }, (error: AxiosError) => {
-    console.log("caught by interceptor")
+
+    const {data, status} = error.response! as any;
+    console.log(data);
+    switch (status) {
+        case 400:
+            // for validation errors which is also a 400
+            if (data.errors) {
+                const modelStateErrors: string[] = [];
+                for (const key in data.errors) {
+                    if (data.errors[key]) {
+                        modelStateErrors.push(data.errors[key]);
+                    }
+                }
+                throw modelStateErrors.flat();
+            }
+            toast.error(data.title);
+            break;
+        case 401:
+            toast.error(data.title);
+            break;
+        case 500:
+            console.log(data);
+            // toast.error(data.title);
+            history.push({
+                pathname: '/server-error',
+
+            }, {error: data});
+            break;
+        default:
+            break;
+    }
     return Promise.reject(error.response);
 })
 const requests = {
@@ -27,7 +59,7 @@ const Catalog = {
 
 const TestErrors = {
     get400Error: () => requests.get('buggy/bad-request'),
-    get401Error: () => requests.get('buggy/unathorized'),
+    get401Error: () => requests.get('buggy/unauthorized'),
     get404Error: () => requests.get('buggy/not-found'),
     get500Error: () => requests.get('buggy/server-error'),
     getValidationError: () => requests.get('buggy/validation-error'),

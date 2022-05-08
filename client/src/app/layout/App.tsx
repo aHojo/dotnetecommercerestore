@@ -9,6 +9,9 @@ import About from "../../features/About/About";
 import Home from "../../features/Home/Home";
 import {ToastContainer} from "react-toastify";
 
+import "react-toastify/dist/ReactToastify.css";
+import ServerError from "../errors/ServerError";
+
 
 // import { ThemeProvider } from "@emotion/react";
 
@@ -30,7 +33,7 @@ function App() {
 
     return (
         <ThemeProvider theme={theme}>
-            <ToastContainer />
+            <ToastContainer position={"bottom-right"} hideProgressBar />
             <CssBaseline/>
 
             <Header darkMode={darkMode} handleThemeChange={handleThemeChange}/>
@@ -41,6 +44,7 @@ function App() {
                     <Route path='/catalog/:id' element={<ProductDetails />}/>
                     <Route path='/about' element={<About />}/>
                     <Route path='/contact' element={<Contact />}/>
+                    <Route path='/server-error' element={<ServerError />}/>
                 </Routes>
             </Container>
         </ThemeProvider>
