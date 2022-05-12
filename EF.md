@@ -16,3 +16,6 @@
 
 ## Delete the db
 `dotnet ef database drop`
+
+## Added a new Entity
+`dotnet ef migrations add BasketEntityAdded`

@@ -9,6 +9,7 @@ namespace API.Entities
   {
     public int Id { get; set; }
     public string BuyerId { get; set; }
+    // One to many relationship
     public List<BasketItem> Items { get; set; } = new List<BasketItem>();
 
     // these methods are only doing things in memory, they are not using the database. 
@@ -31,7 +32,7 @@ namespace API.Entities
       if (item == null) return;
 
       item.Quantity -= quantity;
-      if (item.Quantity == 0) Items.Remove(item);
+      if (item.Quantity <= 0) Items.Remove(item);
     }
   }
 }
