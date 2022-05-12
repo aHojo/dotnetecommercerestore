@@ -59,7 +59,10 @@ namespace API
       // must be used here or it will fail.
       app.UseCors(opt =>
       {
-        opt.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
+        opt.AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials() // allows us to pass cookies 
+        .WithOrigins("http://localhost:3000");
       });
 
       app.UseAuthorization();
