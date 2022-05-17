@@ -75,7 +75,7 @@ const Basket = {
   get: () => requests.get('basket'),
   //http://localhost:5000/api/Basket?productId=1&quantity=1
   addItem: (productId: number, quantity = 1) => requests.post(`basket?productId=${productId}&quantity=${quantity}`, {}),
-  removeItem: (productId: number, quantity = 1) => requests.delete(`baseket?productId=${productId}&quantity=${quantity}`),
+  removeItem: (productId: number, quantity = 1) => requests.delete(`basket?productId=${productId}&quantity=${quantity}`),
 }
 
 const agent = {

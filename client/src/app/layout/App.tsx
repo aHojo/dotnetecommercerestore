@@ -1,7 +1,7 @@
 import Catalog from "../../features/catalog/Catalog";
 import { Container, createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import Header from './Header';
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import ProductDetails from "../../features/catalog/ProductDetails";
 import Contact from "../../features/Contact/Contact";
@@ -14,11 +14,17 @@ import ServerError from "../errors/ServerError";
 import NotFound from "../errors/NotFound";
 
 import BasketPage from "../../features/BasketPage/BasketPage";
+import { useStoreContext } from "../../context/StoreContext";
+import { getCookie } from "../util/util";
+import agent from "../api/agent";
+import Loading from "./Loading";
 
 
 // import { ThemeProvider } from "@emotion/react";
 
 function App() {
+  const { setBasket } = useStoreContext();
+  const [loading, setLoading] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
   const paletteType = darkMode ? 'dark' : 'light';
   const theme = createTheme({
@@ -28,12 +34,29 @@ function App() {
         default: paletteType === 'light' ? '#eaeaea' : '#121212'
       }
     }
-  })
+  });
+
+
+  useEffect(() => {
+    const buyerId = getCookie('buyerId');
+    if (buyerId) {
+      agent.Basket.get()
+        .then(basket => {
+          setBasket(basket)
+        })
+        .catch(err => console.log(err))
+        .finally(() => setLoading(false))
+    } else {
+      setLoading(false);
+    }
+  }, [setBasket])
+
 
   function handleThemeChange() {
     setDarkMode(!darkMode);
   }
 
+  if (loading) return <Loading message="Initializing app..."></Loading>
   return (
     <ThemeProvider theme={theme}>
       <ToastContainer position={"bottom-right"} hideProgressBar />
