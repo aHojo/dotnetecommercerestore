@@ -18,6 +18,7 @@ import { useStoreContext } from "../../context/StoreContext";
 import { getCookie } from "../util/util";
 import agent from "../api/agent";
 import Loading from "./Loading";
+import CheckoutPage from "../../features/Checkout/Checkout.Page";
 
 
 // import { ThemeProvider } from "@emotion/react";
@@ -72,6 +73,7 @@ function App() {
           <Route path='/contact' element={<Contact />} />
           <Route path='/server-error' element={<ServerError />} />
           <Route path='/basket' element={<BasketPage />} />
+          <Route path='/checkout' element={<CheckoutPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Container>
