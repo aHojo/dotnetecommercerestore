@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { request } from "http";
 import { toast } from "react-toastify";
 import { history } from "../../index";
+import { PaginatedResponse } from "../models/Pagination";
 
 const sleep = () => {
 
@@ -16,11 +16,17 @@ const responseBody = (response: AxiosResponse) => {
 
 axios.interceptors.response.use(async response => {
   await sleep();
+
+  const pagination = response.headers['pagination'];
+  if (pagination) {
+    response.data = new PaginatedResponse(response.data, JSON.parse(pagination))
+    return response;
+  }
+
   return response;
 }, (error: AxiosError) => {
 
   const { data, status } = error.response! as any;
-  console.log(data);
   switch (status) {
     case 400:
       // for validation errors which is also a 400
@@ -50,7 +56,7 @@ axios.interceptors.response.use(async response => {
   return Promise.reject(error.response);
 })
 const requests = {
-  get: (url: string) => axios.get(url).then(responseBody),
+  get: (url: string, params?: URLSearchParams) => axios.get(url, { params }).then(responseBody),
   post: (url: string, body: {}) => axios.post(url, body).then(responseBody),
   put: (url: string, body: {}) => axios.put(url, body).then(responseBody),
   delete: (url: string) => axios.delete(url).then(responseBody),
@@ -58,8 +64,9 @@ const requests = {
 
 const Catalog = {
   // in the get the request is pre-peneded with the baseURL up on line 3
-  list: () => requests.get('products'),
-  details: (id: number) => requests.get(`products/${id}`)
+  list: (params: URLSearchParams) => requests.get('products', params),
+  details: (id: number) => requests.get(`products/${id}`),
+  fetchFilters: () => requests.get('products/filters')
 }
 
 const TestErrors = {
