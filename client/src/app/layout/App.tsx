@@ -19,12 +19,15 @@ import { getCookie } from "../util/util";
 import agent from "../api/agent";
 import Loading from "./Loading";
 import CheckoutPage from "../../features/Checkout/Checkout.Page";
+import {useAppDispatch} from "../store/configureStore";
+import {setBasket} from "../../features/BasketPage/basketslice";
 
 
 // import { ThemeProvider } from "@emotion/react";
 
 function App() {
-  const { setBasket } = useStoreContext();
+  // const { setBasket } = useStoreContext();
+  const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
   const paletteType = darkMode ? 'dark' : 'light';
@@ -43,7 +46,8 @@ function App() {
     if (buyerId) {
       agent.Basket.get()
         .then(basket => {
-          setBasket(basket)
+          // setBasket(basket)
+          dispatch(setBasket(basket))
         })
         .catch(err => console.log(err))
         .finally(() => setLoading(false))

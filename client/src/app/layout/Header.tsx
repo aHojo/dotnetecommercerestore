@@ -2,6 +2,7 @@ import { AppBar, IconButton, List, ListItem, Switch, Toolbar, Typography, Badge,
 import { Link, NavLink } from "react-router-dom";
 import { ShoppingCart } from "@mui/icons-material";
 import { useStoreContext } from "../../context/StoreContext";
+import {useAppSelector} from "../store/configureStore";
 
 
 interface HeaderProps {
@@ -32,7 +33,7 @@ const navStyles = {
   }
 }
 export default function Header({ darkMode, handleThemeChange }: HeaderProps) {
-  const { basket } = useStoreContext();
+  const { basket } = useAppSelector(state => state.basket);
 
   const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0);
 

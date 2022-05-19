@@ -5,6 +5,10 @@ import agent from '../../app/api/agent';
 import { useState } from 'react';
 import { LoadingButton } from '@mui/lab';
 import { useStoreContext } from '../../context/StoreContext';
+import {useAppDispatch, useAppSelector} from "../../app/store/configureStore";
+import {addBasketItemAsync} from "../BasketPage/basketslice";
+// import {toast} from "react-toastify";
+// import loading = toast.loading;
 
 
 interface ProductProps {
@@ -13,18 +17,20 @@ interface ProductProps {
 
 
 export default function ProductCard({ product }: ProductProps) {
+    const {status} = useAppSelector(state => state.basket)
+    const dispatch = useAppDispatch();
 
-  const { setBasket } = useStoreContext();
+    // const { setBasket } = useStoreContext();
+  // const [loading, setLoading] = useState(false);
 
-  const [loading, setLoading] = useState(false);
+  // function handleAddItem(productId: number) {
+  //   setLoading(true);
+  //   agent.Basket.addItem(productId)
+  //     .then(basket => dispatch(setBasket(basket)))
+  //     .catch(err => console.error(err))
+  //     .finally(() => setLoading(false));
+  // }
 
-  function handleAddItem(productId: number) {
-    setLoading(true);
-    agent.Basket.addItem(productId)
-      .then(basket => setBasket(basket))
-      .catch(err => console.error(err))
-      .finally(() => setLoading(false));
-  }
   return (
     <Card>
       <CardHeader avatar={
@@ -53,7 +59,7 @@ export default function ProductCard({ product }: ProductProps) {
         </Typography>
       </CardContent>
       <CardActions>
-        <LoadingButton loading={loading} onClick={() => handleAddItem(product.id)} size="small">Add Product</LoadingButton>
+        <LoadingButton loading={status.includes("pendingAddItem" + product.id)} onClick={() => dispatch(addBasketItemAsync({productId: product.id}))} size="small">Add Product</LoadingButton>
         <Button component={Link} to={`/catalog/${product.id}`} size="small">View</Button>
       </CardActions>
     </Card>
