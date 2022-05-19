@@ -23,7 +23,10 @@ namespace API.Controllers
     public async Task<ActionResult<List<Product>>> GetProducts()
     {
       // var products =  context.Products.ToList();
+      // This is to just get the list of our products
       var products = await _context.Products.ToListAsync();
+    
+      // var query = _context.Products.AsQueryable();
 
       return Ok(products);
     }
