@@ -1,8 +1,9 @@
 using API.Data;
+using API.Entities;
 using API.MiddleWare;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,6 +36,16 @@ namespace API
       });
 
       services.AddCors();
+      services.AddIdentityCore<User>(opt =>
+      {
+        opt.User.RequireUniqueEmail = true;
+      })
+      .AddRoles<IdentityRole>()
+      // Adds all the identity tables
+      .AddEntityFrameworkStores<StoreContext>();
+
+      services.AddAuthentication();
+      services.AddAuthorization();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
