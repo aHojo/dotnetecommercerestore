@@ -4,21 +4,27 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.DTOs;
 using API.Entities;
+using API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+  // This annotation would protect the entire controller
+  // [Authorize]
   public class AccountController : BaseAPIController
   {
     private readonly UserManager<User> _userManager;
-    public AccountController(UserManager<User> userManager)
+    private readonly TokenService _tokenService;
+    public AccountController(UserManager<User> userManager, TokenService tokenService)
     {
       this._userManager = userManager;
+      this._tokenService = tokenService;
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult<User>> Login(LoginDto loginDto)
+    public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
     {
       var user = await _userManager.FindByNameAsync(loginDto.Username);
 
@@ -27,7 +33,12 @@ namespace API.Controllers
         return Unauthorized();
       }
 
-      return user;
+      return new UserDto
+      {
+        Email = user.Email,
+        Token = await _tokenService.GenerateToken(user)
+
+      };
     }
 
     [HttpPost("register")]
@@ -50,6 +61,21 @@ namespace API.Controllers
       await _userManager.AddToRoleAsync(user, "Member");
 
       return StatusCode(201);
+    }
+
+    // Protects the endpoint
+    [Authorize] // For this to work we need to add to Startup.cs
+    [HttpGet("currentUser")]
+    public async Task<ActionResult<UserDto>> GetCurrentUser()
+    {
+      // This will go get our name claim from the JWT token passed 
+      var user = await _userManager.FindByNameAsync(User.Identity.Name);
+
+      return new UserDto
+      {
+        Email = user.Email,
+        Token = await _tokenService.GenerateToken(user)
+      };
     }
   }
 }
