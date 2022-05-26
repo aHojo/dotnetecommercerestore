@@ -19,8 +19,10 @@ import { getCookie } from "../util/util";
 import agent from "../api/agent";
 import Loading from "./Loading";
 import CheckoutPage from "../../features/Checkout/Checkout.Page";
-import {useAppDispatch} from "../store/configureStore";
-import {setBasket} from "../../features/BasketPage/basketslice";
+import { useAppDispatch } from "../store/configureStore";
+import { setBasket } from "../../features/BasketPage/basketslice";
+import Login from "../../features/Acount/Login";
+import Register from "../../features/Acount/Register";
 
 
 // import { ThemeProvider } from "@emotion/react";
@@ -78,6 +80,8 @@ function App() {
           <Route path='/server-error' element={<ServerError />} />
           <Route path='/basket' element={<BasketPage />} />
           <Route path='/checkout' element={<CheckoutPage />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/register' element={<Register />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Container>
