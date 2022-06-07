@@ -25,11 +25,17 @@ export default function Login() {
   })
 
   async function submitForm(data: FieldValues) {
-    // because of the register function this is passed 
-    // {username: "bob", password: "Pa$$w0rd"} for example 
-    // when submitted
-    await dispatch(signInUser(data));
-    navigate("/catalog");
+
+    try {
+      // because of the register function this is passed 
+      // {username: "bob", password: "Pa$$w0rd"} for example 
+      // when submitted
+      await dispatch(signInUser(data));
+      navigate("/catalog");
+    }
+    catch (e: any) {
+      console.log(e)
+    }
   }
 
   return (
