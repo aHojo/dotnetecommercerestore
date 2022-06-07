@@ -1,7 +1,7 @@
 import Catalog from "../../features/catalog/Catalog";
 import { Container, createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import Header from './Header';
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import ProductDetails from "../../features/catalog/ProductDetails";
 import Contact from "../../features/Contact/Contact";
@@ -20,9 +20,10 @@ import agent from "../api/agent";
 import Loading from "./Loading";
 import CheckoutPage from "../../features/Checkout/Checkout.Page";
 import { useAppDispatch } from "../store/configureStore";
-import { setBasket } from "../../features/BasketPage/basketslice";
+import { fetchBasketAsync, setBasket } from "../../features/BasketPage/basketslice";
 import Login from "../../features/Acount/Login";
 import Register from "../../features/Acount/Register";
+import { fetchCurrentUser } from "../../features/Acount/AccountSlice";
 
 
 // import { ThemeProvider } from "@emotion/react";
@@ -42,21 +43,33 @@ function App() {
     }
   });
 
+  const initApp = useCallback(async () => {
+    try {
+      await dispatch(fetchCurrentUser());
+      await dispatch(fetchBasketAsync());
+    } catch (e: any) {
+      console.error(e)
+    }
+  }, [dispatch])
+
 
   useEffect(() => {
-    const buyerId = getCookie('buyerId');
-    if (buyerId) {
-      agent.Basket.get()
-        .then(basket => {
-          // setBasket(basket)
-          dispatch(setBasket(basket))
-        })
-        .catch(err => console.log(err))
-        .finally(() => setLoading(false))
-    } else {
-      setLoading(false);
-    }
-  }, [setBasket])
+    // const buyerId = getCookie('buyerId');
+    // dispatch(fetchCurrentUser())
+    // if (buyerId) {
+    //   agent.Basket.get()
+    //     .then(basket => {
+    //       // setBasket(basket)
+    //       dispatch(setBasket(basket))
+    //     })
+    //     .catch(err => console.log(err))
+    //     .finally(() => setLoading(false))
+    // } else {
+    //   setLoading(false);
+    // }
+
+    initApp().then(() => setLoading(false))
+  }, [])
 
 
   function handleThemeChange() {
